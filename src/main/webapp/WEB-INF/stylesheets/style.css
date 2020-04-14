@@ -4,6 +4,15 @@
     color: #FAF6F5 !important;
 }
 
+.rulesbox{
+    float: right;
+    border: 2px solid #dedede;
+    background-color: #1b1b1b;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
 pre{
     color: #FAF6F5;
     white-space: -moz-pre-wrap;

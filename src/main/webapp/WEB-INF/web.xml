@@ -15,6 +15,42 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <!--Error /-->
+  <servlet>
+    <servlet-name>ErrorServlet</servlet-name>
+    <jsp-file>/error.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ErrorServlet</servlet-name>
+    <url-pattern>/error</url-pattern>
+  </servlet-mapping>
+  <!--Error/-->
+
+  <!--BrowseUser /-->
+  <servlet>
+    <servlet-name>BrowseUsersServlet</servlet-name>
+    <jsp-file>/browseusers.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>BrowseUsersServlet</servlet-name>
+    <url-pattern>/browseusers</url-pattern>
+  </servlet-mapping>
+  <!--User /-->
+
+  <!--BrowseRooms /-->
+  <servlet>
+    <servlet-name>BrowseChatRoomsServlet</servlet-name>
+    <jsp-file>/browsechatrooms.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>BrowseChatRoomsServlet</servlet-name>
+    <url-pattern>/browsechatrooms</url-pattern>
+  </servlet-mapping>
+  <!--User /-->
+
   <!--User /-->
     <servlet>
       <servlet-name>UserServlet</servlet-name>
@@ -67,6 +103,8 @@
     <servlet>
       <servlet-name>WelcomeServlet</servlet-name>
       <jsp-file>/welcome.jsp</jsp-file>
+      <servlet-class>controller.WelcomeServlet</servlet-class>
+      <load-on-startup>0</load-on-startup>
     </servlet>
 
     <servlet-mapping>
@@ -74,5 +112,9 @@
       <url-pattern>/</url-pattern>
     </servlet-mapping>
   <!-- Welcome /-->
+
+  <listener>
+    <listener-class>frameworks.ContextListener</listener-class>
+  </listener>
 
 </web-app>

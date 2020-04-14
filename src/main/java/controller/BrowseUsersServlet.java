@@ -1,10 +1,10 @@
 package controller;
 
-import com.sun.net.httpserver.HttpContext;
 import dao.DbSet;
 import rest.UserModel;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -13,16 +13,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/controller.UserServlet")
-public class UserServlet extends HttpServlet {
+@WebServlet("/controller.BrowseUsersServlet")
+public class BrowseUsersServlet extends HttpServlet {
 
     private DbSet dbSet = new DbSet();
 
-    public UserServlet() {
+    public BrowseUsersServlet() {
     }
 
     public void init(){
-        dbSet.userDbSet.Create();
     }
 
     @Override
@@ -31,20 +30,26 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String name = request.getParameter("name");
+        String interest = request.getParameter("interest");
+
         ServletContext context = request.getServletContext();
+        List<UserModel> users = new LinkedList<>();
 
-        UserModel user = new UserModel(
-            request.getParameter("nickName"),
-            Integer.parseInt(request.getParameter("age")),
-            Boolean.parseBoolean(request.getParameter("sex")),
-            request.getParameter("interests")
-            );
-        dbSet.userDbSet.InsertOrReplace(user);
+        if(!name.equals("") && !interest.equals("")){
+            users = dbSet.userDbSet.GetFilteredByNameAndInterest(name, interest);
+        }
+        else if(!name.equals("")){
+            users = dbSet.userDbSet.GetFilteredByName(name);
+        }
+        else if(!interest.equals("")){
+            users = dbSet.userDbSet.GetFilteredByInterest(interest);
+        }
+        else {
+            users = dbSet.userDbSet.List();
+        }
 
-        List<UserModel> users = dbSet.userDbSet.List();
-        context.setAttribute("users", users);
         context.setAttribute("usersBrowse", users);
-
-        response.sendRedirect("/ChibiChat_war");
+        response.sendRedirect("/ChibiChat_war/browseusers");
     }
 }

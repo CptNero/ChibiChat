@@ -10,6 +10,9 @@ public class ChatRoomDbSet extends BaseDbSet {
 
     private Timestamp now;
     private String GET_STRING_BY_NAME;
+    private String GET_STRING_FILTERED_BY_NAME;
+    private String GET_STRING_FILTERED_BY_CATEGORY;
+    private String GET_STRING_FILTERED_BY_NAME_AND_CATEGORY;
 
     public ChatRoomDbSet() {
         super();
@@ -23,6 +26,9 @@ public class ChatRoomDbSet extends BaseDbSet {
         LIST_STRING = "SELECT * FROM ChatRooms";
         GET_STRING = "SELECT * FROM ChatRooms WHERE Id = ?";
         GET_STRING_BY_NAME = "SELECT * FROM ChatRooms WHERE Name = ?";
+        GET_STRING_FILTERED_BY_NAME = "SELECT * FROM ChatRooms WHERE Name LIKE ?";
+        GET_STRING_FILTERED_BY_CATEGORY = "SELECT * FROM ChatRooms WHERE Category LIKE ?";
+        GET_STRING_FILTERED_BY_NAME_AND_CATEGORY = "SELECT * FROM ChatRooms WHERE Name LIKE ? AND Category LIKE ?";
         INSERT_OR_REPLACE_STRING = "REPLACE INTO ChatRooms(CreatedOn, Name, Category, Rules) VALUES(?,?,?,?)";
         DELETE_STRING = "DELETE FROM ChatRooms WHERE Id = ?";
         now = new Timestamp(System.currentTimeMillis());
@@ -114,7 +120,89 @@ public class ChatRoomDbSet extends BaseDbSet {
             connection = DriverManager.getConnection(DB_STRING);
             PreparedStatement statement = connection.prepareStatement(GET_STRING);
             statement.setLong(1, id);
-            statement.executeUpdate();
+            statement.execute();
+
+            ResultSet result = statement.getResultSet();
+            List<ChatRoomModel> chatRooms = new ArrayList<>();
+
+            while(result.next()){
+                chatRooms.add(new ChatRoomModel(
+                        result.getLong("Id"),
+                        result.getTimestamp("CreatedOn"),
+                        result.getString("Name"),
+                        result.getString("Category"),
+                        result.getString("Rules")
+                ));
+            }
+            connection.close();
+            return chatRooms;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<ChatRoomModel> GetFilteredByName(String name){
+        try {
+            connection = DriverManager.getConnection(DB_STRING);
+            PreparedStatement statement = connection.prepareStatement(GET_STRING_FILTERED_BY_NAME);
+            statement.setString(1, name + "%");
+            statement.execute();
+
+            ResultSet result = statement.getResultSet();
+            List<ChatRoomModel> chatRooms = new ArrayList<>();
+
+            while(result.next()){
+                chatRooms.add(new ChatRoomModel(
+                        result.getLong("Id"),
+                        result.getTimestamp("CreatedOn"),
+                        result.getString("Name"),
+                        result.getString("Category"),
+                        result.getString("Rules")
+                ));
+            }
+            connection.close();
+            return chatRooms;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<ChatRoomModel> GetFilteredByCategory(String category){
+        try {
+            connection = DriverManager.getConnection(DB_STRING);
+            PreparedStatement statement = connection.prepareStatement(GET_STRING_FILTERED_BY_CATEGORY);
+            statement.setString(1, category + "%");
+            statement.execute();
+
+            ResultSet result = statement.getResultSet();
+            List<ChatRoomModel> chatRooms = new ArrayList<>();
+
+            while(result.next()){
+                chatRooms.add(new ChatRoomModel(
+                        result.getLong("Id"),
+                        result.getTimestamp("CreatedOn"),
+                        result.getString("Name"),
+                        result.getString("Category"),
+                        result.getString("Rules")
+                ));
+            }
+            connection.close();
+            return chatRooms;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<ChatRoomModel> GetFilteredByNameAndCategory(String name, String category){
+        try {
+            connection = DriverManager.getConnection(DB_STRING);
+            PreparedStatement statement = connection.prepareStatement(GET_STRING_FILTERED_BY_NAME_AND_CATEGORY);
+            statement.setString(1, name + "%");
+            statement.setString(2, category + "%");
+            statement.execute();
 
             ResultSet result = statement.getResultSet();
             List<ChatRoomModel> chatRooms = new ArrayList<>();

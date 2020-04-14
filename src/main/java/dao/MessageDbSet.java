@@ -17,12 +17,13 @@ public class MessageDbSet extends BaseDbSet {
                 "CreatedOn DATETIME NOT NULL," +
                 "ChatRoomId INTEGER NOT NULL," +
                 "UserId INTEGER NOT NULL," +
+                "SenderName TEXT NOT NULL," +
                 "Message TEXT NOT NULL," +
                 "Image TEXT);";
         DROP_STRING = "DROP TABLE Messages;";
         LIST_STRING = "SELECT * FROM Messages WHERE";
         GET_STRING = "SELECT * FROM Messages WHERE ChatRoomId = ?;";
-        INSERT_OR_REPLACE_STRING = "REPLACE INTO Messages(CreatedOn, ChatRoomId, UserId, Message, Image) VALUES(?,?,?,?,?)";
+        INSERT_OR_REPLACE_STRING = "REPLACE INTO Messages(CreatedOn, ChatRoomId, UserId, SenderName, Message, Image) VALUES(?,?,?,?,?,?)";
         DELETE_STRING = "DELETE FROM Messages WHERE Id = ?";
         now = new Timestamp(System.currentTimeMillis());
     }
@@ -51,6 +52,7 @@ public class MessageDbSet extends BaseDbSet {
                         result.getTimestamp("CreatedOn"),
                         result.getLong("ChatRoomId"),
                         result.getLong("UserId"),
+                        result.getString("SenderName"),
                         result.getString("Message"),
                         result.getString("Image"))
                 );
@@ -76,6 +78,7 @@ public class MessageDbSet extends BaseDbSet {
                     result.getTimestamp("CreatedOn"),
                     result.getLong("ChatRoomId"),
                     result.getLong("UserId"),
+                    result.getString("SenderName"),
                     result.getString("Message"),
                     result.getString("Image")
             );
@@ -103,6 +106,7 @@ public class MessageDbSet extends BaseDbSet {
                         result.getTimestamp("CreatedOn"),
                         result.getLong("ChatRoomId"),
                         result.getLong("UserId"),
+                        result.getString("SenderName"),
                         result.getString("Message"),
                         result.getString("Image"))
                 );
@@ -122,8 +126,9 @@ public class MessageDbSet extends BaseDbSet {
             statement.setTimestamp(1, now);
             statement.setLong(2, message.getChatRoomId());
             statement.setLong(3, message.getUserId());
-            statement.setString(4, message.getMessage());
-            statement.setString(5, message.getImage());
+            statement.setString(4, message.getSendername());
+            statement.setString(5, message.getMessage());
+            statement.setString(6, message.getImage());
             statement.executeUpdate();
             connection.close();
         } catch (SQLException throwables){

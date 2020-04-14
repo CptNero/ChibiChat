@@ -2,6 +2,7 @@ package controller;
 
 import dao.DbSet;
 import rest.MessageModel;
+import rest.UserModel;
 
 import java.io.IOException;
 import java.sql.DriverManager;
@@ -29,12 +30,5 @@ public class MessageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        MessageModel message = new MessageModel(
-            Long.parseLong(request.getParameter("chatRoomId")),
-            Long.parseLong(request.getParameter("userId")),
-            request.getParameter("message"),
-            request.getParameter("image")
-        );
-        dbSet.messageDbSet.InsertOrReplace(message);
     }
 }

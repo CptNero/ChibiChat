@@ -8,21 +8,25 @@ public class MessageModel extends BaseModel {
 
     private long UserId;
 
+    private String SenderName;
+
     private String Message;
 
     private String Image;
 
-    public MessageModel(long chatRoomId, long userId, String message, String image) {
+    public MessageModel(long chatRoomId, long userId, String senderName, String message, String image) {
         ChatRoomId = chatRoomId;
         UserId = userId;
+        SenderName = senderName;
         Message = message;
         Image = image;
     }
 
-    public MessageModel(long id, Timestamp createdOn, long chatRoomId, long userId, String message, String image) {
+    public MessageModel(long id, Timestamp createdOn,long chatRoomId, long userId, String senderName, String message, String image) {
         super(id, createdOn);
         ChatRoomId = chatRoomId;
         UserId = userId;
+        SenderName = senderName;
         Message = message;
         Image = image;
     }
@@ -42,4 +46,9 @@ public class MessageModel extends BaseModel {
     public String getImage() { return Image; }
 
     public void setImage(String image) { Image = image; }
+
+    public String getSendername( ) { return SenderName; }
+
+    public void setSenderName(String senderName) { SenderName = senderName; }
+
 }
